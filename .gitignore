@@ -1,0 +1,27 @@
+#### Project Specific Ignore ####
+
+# TODO
+
+#### Generic Ignore ####
+
+# Generated files
+*~
+*.bak
+*.[oa]
+*.so
+*.os
+*.pyc
+
+# Debugging
+core
+
+# Generic compilation
+a.out
+
+# SCons Database
+.sconsign.dblite
+
+# SWIG Generated Wrappers
+*_wrap.cc
+*_wrap.h
+

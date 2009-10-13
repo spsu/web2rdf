@@ -1,0 +1,11 @@
+This is a project to make XSL templates to scrape content from several popular
+websites and convert it into machine-understandable RDF. Obviously there will be
+multiple page types on each website, and all of the relevant templates must be
+kept up to date. If I haven't updated the project in awhile, chances are the
+templates will not work.
+
+The XSL templates as well as the testing code is licesned under the LGPL 2.
+
+Copyright 2009 Brandon Thomas
+http://possibilistic.org
+echelon@gmail.com
