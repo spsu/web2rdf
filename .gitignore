@@ -1,6 +1,10 @@
 #### Project Specific Ignore ####
 
-# TODO
+# Files I often save to:
+temp.*
+cache.*
+out.*
+output.*
 
 #### Generic Ignore ####
 

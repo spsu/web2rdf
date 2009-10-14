@@ -4,8 +4,9 @@ multiple page types on each website, and all of the relevant templates must be
 kept up to date. If I haven't updated the project in awhile, chances are the
 templates will not work.
 
-The XSL templates as well as the testing code is licesned under the LGPL 2.
+* XSL code framework is licesned under the GPL 3.
+* XSL Templates licensed under the CC-BY-SA.
 
-Copyright 2009 Brandon Thomas
+Copyright 2009 Brandon Thomas Suit
 http://possibilistic.org
 echelon@gmail.com
