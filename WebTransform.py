@@ -57,8 +57,11 @@ class WebTransform(object):
 		if not path:
 			path = "/"
 
+		print "Downloading..."
 		conn = httplib.HTTPConnection(u.netloc)
 		conn.request("GET", path)
+		print "Downloaded."
+
 		resp = conn.getresponse()
 
 		self.html = str(resp.read())
@@ -77,6 +80,7 @@ class WebTransform(object):
 		xdoc = libxml2.parseFile(xsltFile) # TODO: Free
 		self.xslt = libxslt.parseStylesheetDoc(xdoc)
 		self.rdf = self.xslt.applyStylesheet(htmldoc, None)
+
 
 	def saveRdf(self, saveFile):
 		if not self.xslt or not self.rdf:
