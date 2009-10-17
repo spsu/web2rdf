@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2009 Brandon Thomas Suit
+	 web: http://possibilistic.org
+	 email: echelon@gmail.com
+	 Licensed under the BSD and CC-BY-SA. -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"

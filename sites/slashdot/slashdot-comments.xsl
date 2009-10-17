@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2009 Brandon Thomas Suit
+	 web: http://possibilistic.org
+	 email: echelon@gmail.com
+	 Licensed under the BSD and CC-BY-SA. -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"
 	xmlns:str="http://exslt.org/strings"
+	xmlns:w2rdf="http://possibilistic.org/projects/web2rdf"
 	xmlns:sioc="http://rdfs.org/sioc/ns#"
-	extension-element-prefixes="str">
+	extension-element-prefixes="str w2rdf">
 
 <xsl:import href="../../exslt/str.xsl" />
+<xsl:import href="../../xsl-functions/all.xsl" />
 
 <xsl:strip-space elements="*"/>
 <xsl:output 
@@ -51,6 +57,20 @@
 		select="//span[@class='by']/../../..">
 
 		<!-- Variables -->
+		<xsl:variable
+			name="postUri"
+			select=".//div[@class='title']/h4/a/@href" />
+
+		<xsl:variable
+			name="postId"
+			select="w2rdf:substring-between(
+				.//div[@class='commentSub']//span[2]//a/@onclick, '(', ')' )" />
+
+		<xsl:variable
+			name="parentId"
+			select="w2rdf:substring-between(
+				.//div[@class='commentSub']//span[2]//a/@onclick, '(', ')' )" />
+
 		<xsl:variable 
 			name="title" 
 			select=".//div[@class='title']/h4/a" />
@@ -61,9 +81,8 @@
 
 		<xsl:variable 
 			name="rating" 
-			select="substring-before(
-						substring-after(
-							.//div[@class='title']/h4/span, ', '), ')' )" />
+			select="w2rdf:substring-between(
+				.//div[@class='title']/h4/span, ', ', ')' )" />
 
 		<xsl:variable
 			name="username"
@@ -79,19 +98,13 @@
 
 		<xsl:variable
 			name="userid"
-			select="substring-before(
-				substring-after(
-					.//span[@class='by']/a/text(), '('), ')')" />
+			select="w2rdf:substring-between(
+				.//span[@class='by']/a/text(), '(', ')' )" />
 
 		<xsl:variable
 			name="date"
-			select="substring-before(
-				substring-after(
-					.//span[@class='otherdetails'], 'on '), ' (')" />
-
-		<xsl:variable
-			name="posturi"
-			select=".//div[@class='title']/h4/a/@href" />
+			select="w2rdf:substring-between(
+				.//span[@class='otherdetails'], 'on ', ' (' )" />
 
 		<xsl:variable
 			name="userHomepage"
@@ -105,19 +118,6 @@
 			name="isPartialComment"
 			select=".//span[@class='substr']" />
 
-		<xsl:variable
-			name="parentId"
-			select="substring-after(
-				substring-before(
-					.//div[@class='commentSub']//span[2]//a/@onclick, ')'),
-			'(' )" />
-
-		<!--<xsl:variable
-			name="parentId"
-			select=".//div[@class='commentSub']//span[@class='nbutton'][2]//a/@onclick" />
-		-->
-
-
 		<!-- Comment -->
 		<xsl:comment> Post #<xsl:value-of 
 				select="position()" /> of <xsl:value-of 
@@ -128,7 +128,7 @@
 
 			<xsl:attribute 
 				name="rdf:about">http:<xsl:value-of 
-				select="$posturi" /></xsl:attribute>
+				select="$postUri" /></xsl:attribute>
 
 			<xsl:if test="$parentId">
 				<sioc:reply_of>
@@ -200,6 +200,9 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- Paragraph, quote, or whatever -->
+							<xsl:if test="name(.)='div'">
+								<xsl:text>Quote: </xsl:text>
+							</xsl:if>
 							<xsl:value-of select="." />
 							<xsl:if test="position() != last()">
 								<!-- Followed by *two* newlines -->
