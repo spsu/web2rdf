@@ -53,11 +53,11 @@ class WebTransform(object):
 			uri = self.cacheUri
 
 		u = urlparse(uri)
-		path = u.path + u.query + u.fragment
+		path = u.path + ("?" + u.query if u.query else "") + u.fragment
 		if not path:
 			path = "/"
 
-		print "Downloading..."
+		print "Downloading %s from %s..." % (path, u.netloc)
 		conn = httplib.HTTPConnection(u.netloc)
 		conn.request("GET", path)
 		print "Downloaded."
@@ -65,6 +65,12 @@ class WebTransform(object):
 		resp = conn.getresponse()
 
 		self.html = str(resp.read())
+
+	def load(self, filename):
+		"""Load HTML from a file instead of downloading."""
+		f = open(filename)
+		self.html = f.read()
+		f.close()
 
 	def convert(self):
 		"""Convert to RDF with the XSL Template mapped to the URI."""
@@ -81,8 +87,15 @@ class WebTransform(object):
 		self.xslt = libxslt.parseStylesheetDoc(xdoc)
 		self.rdf = self.xslt.applyStylesheet(htmldoc, None)
 
+	def saveHtml(self, saveFile):
+		"""Save processed XHTML data."""
+		# TODO - save processed XHTML data instead of raw html.
+		f = open(saveFile, 'w')
+		f.write(self.html)
+		f.close()
 
 	def saveRdf(self, saveFile):
+		"""Save returned RDF data."""
 		if not self.xslt or not self.rdf:
 			print "saveRdf() err: No RDF to save."
 			return

@@ -51,7 +51,6 @@
 		<xsl:variable 
 			name="commentCount" 
 			select=".//span[@class='commentcnt']/a/text()" />
-
 		<xsl:variable
 			name="contentNode"
 			select=".//div[substring(@id,1,5)='text-']" />
@@ -107,14 +106,14 @@
 
 			<!-- tag cloud -->
 			<xsl:for-each select=".//a[@class='popular tag']">
-				<sioc:topic>
+				<sioct:tag>
 					<xsl:attribute 
 						name="rdf:resource">http://slashdot.org/tag/<xsl:value-of select="." />
 					</xsl:attribute>
 					<xsl:attribute 
 						name="rdfs:label"><xsl:value-of select="." />
 					</xsl:attribute>
-				</sioc:topic>
+				</sioct:tag>
 			</xsl:for-each>
 
 		</sioc:Post>
