@@ -23,8 +23,7 @@
 	Also, its URI is not final.
 
 	TODO:
-	* How to do quotes within plaintext sioc:content?? 
-	* HTML markup payload <sioc:content>
+	* How to do quotes within plaintext sioc:content??
 	* Seperate user section with posts containing URI references.
 	* List a post's parents and children.
 	* List a post's respond-to address, etc.
@@ -71,6 +70,10 @@
 			select="substring-before(.//span[@class='by']/a/text(), ' (')" />
 
 		<xsl:variable
+			name="anonymousUser"
+			select="substring-after(.//span[@class='by'], 'by ')" />
+
+		<xsl:variable
 			name="userpage"
 			select=".//span[@class='by']/a/@href" />
 
@@ -96,10 +99,24 @@
 
 		<xsl:variable
 			name="contentNode"
-			select=".//div[@class='commentBody']/div" />
-		<xsl:variable
-			name="contentNodeLit"
 			select=".//div[@class='commentBody']/div/node()" />
+
+		<xsl:variable
+			name="isPartialComment"
+			select=".//span[@class='substr']" />
+
+		<xsl:variable
+			name="parentId"
+			select="substring-after(
+				substring-before(
+					.//div[@class='commentSub']//span[2]//a/@onclick, ')'),
+			'(' )" />
+
+		<!--<xsl:variable
+			name="parentId"
+			select=".//div[@class='commentSub']//span[@class='nbutton'][2]//a/@onclick" />
+		-->
+
 
 		<!-- Comment -->
 		<xsl:comment> Post #<xsl:value-of 
@@ -108,9 +125,20 @@
 
 		<!-- Each post -->
 		<sioc:Post>
+
 			<xsl:attribute 
 				name="rdf:about">http:<xsl:value-of 
 				select="$posturi" /></xsl:attribute>
+
+			<xsl:if test="$parentId">
+				<sioc:reply_of>
+					<xsl:value-of select="$parentId" />
+				</sioc:reply_of>
+			</xsl:if>
+
+			<xsl:if test="$isPartialComment">
+				<sylph:isPartialContent>True</sylph:isPartialContent>
+			</xsl:if>
 
 			<dcterms:title>
 				<xsl:value-of select="$title" />
@@ -131,29 +159,41 @@
 			<!-- User/Author section -->
 			<sioc:has_creator>
 				<sioc:User>
-					<sylph:websiteUsername>
-						<xsl:value-of select="$username" />
-					</sylph:websiteUsername>
+					<xsl:choose>
+						<xsl:when test="$username">
+							<!-- User with account -->
+							<sylph:websiteUsername>
+								<xsl:value-of select="$username" />
+							</sylph:websiteUsername>
 
-					<sylph:websiteUserPage>http:<xsl:value-of 
-						select="$userpage" /></sylph:websiteUserPage>
+							<sylph:websiteUserPage>http:<xsl:value-of 
+								select="$userpage" /></sylph:websiteUserPage>
 
-					<sylph:websiteUserId>
-						<xsl:value-of select="$userid" />
-					</sylph:websiteUserId>
+							<sylph:websiteUserId>
+								<xsl:value-of select="$userid" />
+							</sylph:websiteUserId>
 
-					<xsl:if test="$userHomepage">
-						<sylph:homepage>
-							<xsl:value-of select="$userHomepage" />
-						</sylph:homepage>
-					</xsl:if>
+							<xsl:if test="$userHomepage">
+								<sylph:homepage>
+									<xsl:value-of select="$userHomepage" />
+								</sylph:homepage>
+							</xsl:if>
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- Anonymous Coward -->
+							<sylph:websiteUsername>
+								<xsl:value-of select="$anonymousUser" />
+							</sylph:websiteUsername>
+						</xsl:otherwise>
+					</xsl:choose>
+					
 
 				</sioc:User>
 			</sioc:has_creator>
 
 			<!-- Main content plaintext -->
 			<sioc:content>
-				<xsl:for-each select="$contentNodeLit">
+				<xsl:for-each select="$contentNode">
 					<xsl:choose>
 						<xsl:when test="normalize-space(.) = ''">
 							<!-- Skip -->
@@ -172,7 +212,7 @@
 
 			<!-- Main content w/ markup -->
 			<sioc:content rdf:parseType="Literal">
-				<xsl:copy-of select="$contentNodeLit" />
+				<xsl:copy-of select="$contentNode" />
 			</sioc:content>
 
 		</sioc:Post>
