@@ -2,7 +2,9 @@
 <!-- Copyright 2009 Brandon Thomas Suit
 	 web: http://possibilistic.org
 	 email: echelon@gmail.com
-	 Licensed under the BSD and CC-BY-SA. -->
+	 Licensed under the BSD and CC-BY-SA 3.0. 
+	 * http://creativecommons.org/licenses/by-sa/3.0/
+-->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"
@@ -36,7 +38,6 @@
 	* Plaintext ul/li replacement (markdown on reddit will be even harder!)
 -->
 
-
 <xsl:template match="/">
 <rdf:RDF
 		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -52,11 +53,11 @@
 		xmlns:sylph="http://possibilistic.org/onto/sylph"
 		>
 
-	<!-- ============= POSTS ============= -->
-	<xsl:for-each 
-		select="//span[@class='by']/../../..">
+	<!-- =================== POSTS =================== -->
+	<xsl:for-each select="//span[@class='by']/../../..">
 
-		<!-- Variables -->
+		<!-- =================== POST VARIABLES =================== -->
+
 		<xsl:variable
 			name="postUri"
 			select=".//div[@class='title']/h4/a/@href" />
@@ -64,12 +65,23 @@
 		<xsl:variable
 			name="postId"
 			select="w2rdf:substring-between(
-				.//div[@class='commentSub']//span[2]//a/@onclick, '(', ')' )" />
+				.//div[@class='commentSub']//span[1]//a/@onclick, '(', ')' )" />
 
 		<xsl:variable
 			name="parentId"
 			select="w2rdf:substring-between(
 				.//div[@class='commentSub']//span[2]//a/@onclick, '(', ')' )" />
+
+		<!-- TODO: Verify this works -->
+		<xsl:variable
+			name="storyId"
+			select="w2rdf:substring-between($postUri, 'sid=', '&amp;')" />
+
+		<!-- XXX Note: Only use parentUri if parentId is set! -->
+		<xsl:variable
+			name="parentUri"
+			select="concat(
+				w2rdf:removeSubstring($postUri, $postId), $parentId)" />
 
 		<xsl:variable 
 			name="title" 
@@ -118,35 +130,41 @@
 			name="isPartialComment"
 			select=".//span[@class='substr']" />
 
+		<!-- =================== POST OUTPUT =================== -->
+
 		<!-- Comment -->
 		<xsl:comment> Post #<xsl:value-of 
 				select="position()" /> of <xsl:value-of 
 				select="last()" />. </xsl:comment>
 
-		<!-- Each post -->
 		<sioc:Post>
 
 			<xsl:attribute 
 				name="rdf:about">http:<xsl:value-of 
 				select="$postUri" /></xsl:attribute>
 
+			<!-- If viewing only a specific comment, the parents of relative 
+			posts are loaded by Javascript/Ajax and won't show up. -->
 			<xsl:if test="$parentId">
-				<sioc:reply_of>
-					<xsl:value-of select="$parentId" />
-				</sioc:reply_of>
+				<sioc:reply_of>http:<xsl:value-of 
+						select="$parentUri" /></sioc:reply_of>
 			</xsl:if>
 
-			<xsl:if test="$isPartialComment">
+			<xsl:if test="$isPartialComment or $date = ''">
 				<sylph:isPartialContent>True</sylph:isPartialContent>
+			</xsl:if>
+
+			<!-- If viewing only a specific comment, the dates of relative posts
+			are missing! Stupid slashdot loads them with Javascript/Ajax. -->
+			<xsl:if test="$date">
+				<dcterms:date>
+					<xsl:value-of select="$date" />
+				</dcterms:date>
 			</xsl:if>
 
 			<dcterms:title>
 				<xsl:value-of select="$title" />
 			</dcterms:title>
-
-			<dcterms:date>
-				<xsl:value-of select="$date" />
-			</dcterms:date>
 
 			<sylph:score>
 				<xsl:value-of select="$score" />
@@ -156,7 +174,7 @@
 				<xsl:value-of select="$rating" />
 			</sylph:rating>
 
-			<!-- User/Author section -->
+			<!-- User/Author section TODO: Make reference! -->
 			<sioc:has_creator>
 				<sioc:User>
 					<xsl:choose>

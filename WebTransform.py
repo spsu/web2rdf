@@ -68,6 +68,7 @@ class WebTransform(object):
 
 	def load(self, filename):
 		"""Load HTML from a file instead of downloading."""
+		print "Loading from file %s." % filename
 		f = open(filename)
 		self.html = f.read()
 		f.close()

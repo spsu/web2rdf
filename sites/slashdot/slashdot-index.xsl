@@ -2,7 +2,9 @@
 <!-- Copyright 2009 Brandon Thomas Suit
 	 web: http://possibilistic.org
 	 email: echelon@gmail.com
-	 Licensed under the BSD and CC-BY-SA. -->
+	 Licensed under the BSD and CC-BY-SA 3.0. 
+	 * http://creativecommons.org/licenses/by-sa/3.0/
+ -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"
