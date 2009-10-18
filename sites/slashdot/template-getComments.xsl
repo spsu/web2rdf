@@ -4,42 +4,16 @@
 	 email: echelon@gmail.com
 	 Licensed under the BSD and CC-BY-SA 3.0. 
 	 * http://creativecommons.org/licenses/by-sa/3.0/
+
+	========== Template: Get Comments [slashdot-getComments] =========
+
+	This template fetches comments made on a story or comment page.
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"
 	xmlns:str="http://exslt.org/strings"
 	xmlns:w2rdf="http://possibilistic.org/projects/web2rdf"
-	xmlns:sioc="http://rdfs.org/sioc/ns#"
-	extension-element-prefixes="str w2rdf">
-
-<xsl:import href="../../exslt/str.xsl" />
-<xsl:import href="../../xsl-functions/all.xsl" />
-
-<xsl:strip-space elements="*"/>
-<xsl:output 
-	method="xml" 
-	version="1.0" 
-	encoding="utf-8"
-	indent="yes"
-/>
-
-<!-- 
-	TODO/XXX: 
-	Make note of the use of the non-existant 'sylph' placeholder ontology!
-	It will need development, refinement, and publication. 
-	Also, its URI is not final.
-
-	TODO:
-	* How to do quotes within plaintext sioc:content??
-	* Seperate user section with posts containing URI references.
-	* List a post's parents and children.
-	* List a post's respond-to address, etc.
-	* Plaintext ul/li replacement (markdown on reddit will be even harder!)
--->
-
-<xsl:template match="/">
-<rdf:RDF
 		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -51,7 +25,20 @@
 		xmlns:rss="http://purl.org/rss/1.0/"
 		xmlns:content="http://purl.org/rss/1.0/modules/content/"
 		xmlns:sylph="http://possibilistic.org/onto/sylph"
-		>
+	extension-element-prefixes="str w2rdf">
+
+<xsl:import href="../../exslt/str.xsl" />
+<xsl:import href="../../w2rdf-functions/all.xsl" />
+
+<xsl:strip-space elements="*"/>
+<xsl:output 
+	method="xml" 
+	version="1.0" 
+	encoding="utf-8"
+	indent="yes"
+/>
+
+<xsl:template name="slashdot-getComments" match="/">
 
 	<!-- =================== POSTS =================== -->
 	<xsl:for-each select="//span[@class='by']/../../..">
@@ -101,26 +88,13 @@
 			select="substring-before(.//span[@class='by']/a/text(), ' (')" />
 
 		<xsl:variable
-			name="anonymousUser"
-			select="substring-after(.//span[@class='by'], 'by ')" />
-
-		<xsl:variable
-			name="userpage"
+			name="userPage"
 			select=".//span[@class='by']/a/@href" />
-
-		<xsl:variable
-			name="userid"
-			select="w2rdf:substring-between(
-				.//span[@class='by']/a/text(), '(', ')' )" />
 
 		<xsl:variable
 			name="date"
 			select="w2rdf:substring-between(
 				.//span[@class='otherdetails'], 'on ', ' (' )" />
-
-		<xsl:variable
-			name="userHomepage"
-			select=".//a[@class='user_homepage_display']/@href" />
 
 		<xsl:variable
 			name="contentNode"
@@ -174,37 +148,23 @@
 				<xsl:value-of select="$rating" />
 			</sylph:rating>
 
-			<!-- User/Author section TODO: Make reference! -->
 			<sioc:has_creator>
 				<sioc:User>
 					<xsl:choose>
 						<xsl:when test="$username">
-							<!-- User with account -->
-							<sylph:websiteUsername>
-								<xsl:value-of select="$username" />
-							</sylph:websiteUsername>
+							
+							<xsl:attribute 
+								name="rdf:about">http:<xsl:value-of 
+								select="$userPage" /></xsl:attribute>
 
-							<sylph:websiteUserPage>http:<xsl:value-of 
-								select="$userpage" /></sylph:websiteUserPage>
-
-							<sylph:websiteUserId>
-								<xsl:value-of select="$userid" />
-							</sylph:websiteUserId>
-
-							<xsl:if test="$userHomepage">
-								<sylph:homepage>
-									<xsl:value-of select="$userHomepage" />
-								</sylph:homepage>
-							</xsl:if>
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- Anonymous Coward -->
-							<sylph:websiteUsername>
-								<xsl:value-of select="$anonymousUser" />
-							</sylph:websiteUsername>
+							<xsl:attribute 
+								name="rdf:nodeID">anonymous</xsl:attribute>
+
 						</xsl:otherwise>
 					</xsl:choose>
-					
 
 				</sioc:User>
 			</sioc:has_creator>
@@ -240,6 +200,5 @@
 
 	</xsl:for-each>
 
-</rdf:RDF>
 </xsl:template>
 </xsl:stylesheet>

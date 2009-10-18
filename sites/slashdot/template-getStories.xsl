@@ -4,27 +4,15 @@
 	 email: echelon@gmail.com
 	 Licensed under the BSD and CC-BY-SA 3.0. 
 	 * http://creativecommons.org/licenses/by-sa/3.0/
- -->
+
+	========== Template: Get Stories [slashdot-getStories] =========
+
+	Fetches the stories on the index pages or channels. 
+-->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"
 	xmlns:str="http://exslt.org/strings"
-	xmlns:sioc="http://rdfs.org/sioc/ns#"
-	extension-element-prefixes="str">
-
-<xsl:import href="../../exslt/str.xsl" />
-
-<xsl:strip-space elements="*"/>
-<xsl:output 
-	method="xml" 
-	version="1.0" 
-	encoding="utf-8"
-	indent="yes"
-/><!--
-	cdata-section-elements="sioc:content"-->
-
-<xsl:template match="/">
-<rdf:RDF
 		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 		xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -35,7 +23,19 @@
 		xmlns:sioct="http://rdfs.org/sioc/types#"
 		xmlns:rss="http://purl.org/rss/1.0/"
 		xmlns:content="http://purl.org/rss/1.0/modules/content/"
-		>
+	extension-element-prefixes="str">
+
+<xsl:import href="../../exslt/str.xsl" />
+
+<xsl:strip-space elements="*"/>
+<xsl:output 
+	method="xml" 
+	version="1.0" 
+	encoding="utf-8"
+	indent="yes"
+/>
+
+<xsl:template name="slashdot-getStories" match="/">
 	<xsl:for-each select="//div[substring(@id,1,9) = 'firehose-' 
 								and substring(@id,1,10) != 'firehose-d'
 								and substring(@id,1,10) != 'firehose-m']">
@@ -125,6 +125,5 @@
 		</sioc:Post>
 	</xsl:for-each>
 
-</rdf:RDF>
 </xsl:template>
 </xsl:stylesheet>
