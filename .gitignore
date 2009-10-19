@@ -6,6 +6,9 @@ cache.*
 out.*
 output.*
 
+# Cache directory for testing
+cache/*
+
 #### Generic Ignore ####
 
 # Generated files

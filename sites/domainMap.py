@@ -14,4 +14,7 @@ def domainMap(uri):
 	if host == 'slashdot.org' or host.endswith('.slashdot.org'):
 		return "slashdot"
 
+	if host == "reddit.com" or host.endswith('.reddit.com'):
+		return "reddit"
+
 	return False

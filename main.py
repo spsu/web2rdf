@@ -4,27 +4,57 @@
 # echelon@gmail.com
 # This code available under the GPL 3 unless otherwise noted.
 
-from WebTransform import WebTransform
+from lib.WebTransform import WebTransform
+from lib.getTemplate import getTemplate
+from lib.fixUri import fixUri
+from lib.CacheMap import CacheMap
 import sys
 
-def main():
-	uri = "http://tech.slashdot.org/comments.pl?sid=1407483&cid=29772213"
-	loadFile = "./cache/slashdot-story.html"
-	tplFile = "./sites/slashdot/slashdot-users.xsl"
-	outFile = "./cache.rdf"
-	outFile2 = "./cache.html"
-	if len(sys.argv) >= 3:
-		uri = sys.argv[1]
-		tplFile = sys.argv[2]
-	if len(sys.argv) >= 4:
-		outFile = sys.argv[3]
+
+def transform(uri, rdfOut = './cache.rdf'):
+	"""Load the source and attempt to find the transform template."""
+
+	uri = fixUri(uri)
+
+	# Get template
+	tplFile = getTemplate(uri)
+	if not tplFile:
+		print "Could not find matching template file for the URI."
+		print "Uri was %s" % uri
+		return False
 
 	wt = WebTransform(uri)
-	#wt.download()
-	wt.load(loadFile)
+
+	# Cache logic
+	cachef = CacheMap(uri)
+	if not cachef.exists() or cachef.isExpired():
+		wt.download()
+		wt.saveHtml(cachef.getCacheFilename())
+	else:
+		wt.load(cachef.getCacheFilename())
+
+	# Convert & save result
 	wt.convertWithXslt(tplFile)
-	wt.saveRdf(outFile)
-	wt.saveHtml(outFile2)
+	wt.saveRdf(rdfOut)
+
+
+def main():
+	if len(sys.argv) < 2:
+		print "Must call with at least a URI parameter."
+		print "Usage: %s uriSrc [, cacheHtmlSrc [, rdfOut [, htmlOut ] ] ]" % \
+			sys.argv[0]
+		return
+
+	# Meh, ugly...
+	args = sys.argv
+	if len(args) == 2:
+		transform(args[1])
+	elif len(args) == 3:
+		transform(args[1], args[2])
+	elif len(args) == 4:
+		transform(args[1], args[2], args[3])
+	elif len(args) == 5:
+		transform(args[1], args[2], args[3], args[4])
 
 
 if __name__ == '__main__':

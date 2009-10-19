@@ -37,9 +37,25 @@ if __name__ == '__main__':
 	print "Testing domainMap.py...\n"
 
 	uris = []
+	# == Slashdot ==
+	uris.append("http://slashdot.org")
+	uris.append("http://linux.slashdot.org/")
+	uris.append("http://slashdot.org/index2.pl?section=&color=green&index=1&"
+				"view=stories&duration=-1&startdate=20091017")
 	uris.append("http://it.slashdot.org/story/09/10/19/0053207/The-Economics-of"
 				"-Federal-Cloud-Computing-Analyzed")
-	uris.append("http://linux.slashdot.org/")
+	uris.append("http://linux.slashdot.org/article.pl?sid=09/10/19/0155235")
+	uris.append("http://science.slashdot.org/comments.pl?sid=1408355&=29781633")
+	uris.append("http://slashdot.org/~BrucePerens")
+
+	# == Reddit ==
+	uris.append("http://www.reddit.com")
+	uris.append("http://www.reddit.com/r/atheism/")
+	uris.append("http://www.reddit.com/r/programming/?count=25&after=t3_9v103")
+	uris.append("http://www.reddit.com/r/programming/comments/9v36r/firefox_to_"
+				"microsoft_gtfo/")
+	uris.append("http://www.reddit.com/user/eurleif")
+
 
 	i = 1
 	for u in uris:
