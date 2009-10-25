@@ -2,8 +2,7 @@
 <!-- Copyright 2009 Brandon Thomas Suit
 	 web: http://possibilistic.org
 	 email: echelon@gmail.com
-	 Licensed under the BSD and CC-BY-SA 3.0. 
-	 * http://creativecommons.org/licenses/by-sa/3.0/
+	 Licensed under the BSD.
 
 	========== Template: Get Stories [slashdot-getStories] =========
 
@@ -40,9 +39,9 @@
 								and substring(@id,1,10) != 'firehose-d'
 								and substring(@id,1,10) != 'firehose-m']">
 
-	<xsl:comment>
-		Post <xsl:value-of select="position()" /> of <xsl:value-of select="last()" />.
-  </xsl:comment>
+	<xsl:comment> Post <xsl:value-of 
+		select="position()" /> of <xsl:value-of 
+		select="last()" />. </xsl:comment>
 
 		<!-- Variables -->
 		<xsl:variable 
@@ -82,9 +81,9 @@
 			</dcterms:title>
 
 			<!-- Main content plaintext-->
-			<sioc:content>
+			<!--<sioc:content>
 				<xsl:value-of select="normalize-space($contentNode)" />
-			</sioc:content>
+			</sioc:content>-->
 
 			<!-- Main content w/ markup -->
 			<sioc:content rdf:parseType="Literal">

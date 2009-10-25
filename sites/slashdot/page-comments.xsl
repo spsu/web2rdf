@@ -2,8 +2,7 @@
 <!-- Copyright 2009 Brandon Thomas Suit
 	 web: http://possibilistic.org
 	 email: echelon@gmail.com
-	 Licensed under the BSD and CC-BY-SA 3.0. 
-	 * http://creativecommons.org/licenses/by-sa/3.0/
+	 Licensed under the BSD.
 
 	========== Page: Comments =========
 
@@ -37,11 +36,12 @@
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
 	xmlns:sylph="http://possibilistic.org/onto/sylph"
 >
-	<xsl:comment> User Section </xsl:comment>
-	<xsl:call-template name="slashdot-getUsers" />
 
 	<xsl:comment> Comment Section </xsl:comment>
 	<xsl:call-template name="slashdot-getComments" />
+
+	<xsl:comment> User Section </xsl:comment>
+	<xsl:call-template name="slashdot-getUsers" />
 
 </rdf:RDF>
 </xsl:template>

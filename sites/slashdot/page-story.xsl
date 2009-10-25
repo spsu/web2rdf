@@ -4,14 +4,16 @@
 	 email: echelon@gmail.com
 	 Licensed under the BSD.
 
-	========== Page: Stories =========
+	========== Page: Story =========
 
-	Returns the stories found typically on an index or section page.
+	Returns the story, users, and comments on a "story" page.
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:import href="./template-getStories.xsl" />
+<xsl:import href="./template-getStoryDetail.xsl" />
+<xsl:import href="./template-getComments.xsl" />
+<xsl:import href="./template-getUsers.xsl" />
 
 <xsl:strip-space elements="*"/>
 <xsl:output 
@@ -35,8 +37,14 @@
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
 	xmlns:sylph="http://possibilistic.org/onto/sylph"
 >
-	<xsl:comment> Stories Section </xsl:comment>
-	<xsl:call-template name="slashdot-getStories" />
+	<xsl:comment> Story Section </xsl:comment>
+	<xsl:call-template name="slashdot-getStoryDetail" />
+
+	<xsl:comment> Comment Section </xsl:comment>
+	<xsl:call-template name="slashdot-getComments" />
+
+	<xsl:comment> User Section </xsl:comment>
+	<xsl:call-template name="slashdot-getUsers" />
 
 </rdf:RDF>
 </xsl:template>

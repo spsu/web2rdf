@@ -84,6 +84,7 @@ class WebTransform(object):
 			print "convertWithXslt() err: HTML not downloaded!"
 			return
 		htmldoc = self.__convertXhtml() # TODO: Free
+		print "Converting with: %s." % xsltFile
 		xdoc = libxml2.parseFile(xsltFile) # TODO: Free
 		self.xslt = libxslt.parseStylesheetDoc(xdoc)
 		self.rdf = self.xslt.applyStylesheet(htmldoc, None)

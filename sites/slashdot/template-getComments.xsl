@@ -2,8 +2,7 @@
 <!-- Copyright 2009 Brandon Thomas Suit
 	 web: http://possibilistic.org
 	 email: echelon@gmail.com
-	 Licensed under the BSD and CC-BY-SA 3.0. 
-	 * http://creativecommons.org/licenses/by-sa/3.0/
+	 Licensed under the BSD.
 
 	========== Template: Get Comments [slashdot-getComments] =========
 
@@ -170,26 +169,26 @@
 			</sioc:has_creator>
 
 			<!-- Main content plaintext -->
-			<sioc:content>
+			<!--<sioc:content>
 				<xsl:for-each select="$contentNode">
 					<xsl:choose>
 						<xsl:when test="normalize-space(.) = ''">
-							<!-- Skip -->
+							<!- - Skip - ->
 						</xsl:when>
 						<xsl:otherwise>
-							<!-- Paragraph, quote, or whatever -->
+							<!- - Paragraph, quote, or whatever - ->
 							<xsl:if test="name(.)='div'">
 								<xsl:text>Quote: </xsl:text>
 							</xsl:if>
 							<xsl:value-of select="." />
 							<xsl:if test="position() != last()">
-								<!-- Followed by *two* newlines -->
+								<!- - Followed by *two* newlines - ->
 								<xsl:text>&#10;&#10;</xsl:text>
 							</xsl:if>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:for-each>
-			</sioc:content>
+			</sioc:content>-->
 
 			<!-- Main content w/ markup -->
 			<sioc:content rdf:parseType="Literal">

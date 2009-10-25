@@ -2,8 +2,7 @@
 <!-- Copyright 2009 Brandon Thomas Suit
 	 web: http://possibilistic.org
 	 email: echelon@gmail.com
-	 Licensed under the BSD and CC-BY-SA 3.0. 
-	 * http://creativecommons.org/licenses/by-sa/3.0/
+	 Licensed under the BSD.
 
 	========== Template: Get Users [slashdot-getUsers] =========
 
