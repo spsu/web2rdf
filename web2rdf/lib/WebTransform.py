@@ -106,20 +106,28 @@ class WebTransform(object):
 			return
 
 		self.xslt.saveResultToFilename(saveFile, self.rdf, 0)
-		
+	
+	def rdfToString(self):
+		"""Return RDF as a string."""
+		return str(self.rdf)
+	
 	def resetXsl(self):
 		"""Remove cached XSLT and RDF, but keep the HTML."""
 		if self.xslt:
 			self.xslt.freeStylesheet()
 			self.xslt = None
-		self.rdf = None # TODO: Probably doesn't free
+		if self.rdf:
+			self.rdf.freeDoc()
+			self.rdf = None
 
 	def reset(self):
 		"""Remove cached HTML, XSLT, and RDF. Only keep the original URI."""
 		if self.xslt:
 			self.xslt.freeStylesheet()
 			self.xslt = None
-		self.rdf = None # TODO: Probably doesn't free
+		if self.rdf:
+			self.rdf.freeDoc()
+			self.rdf = None
 		self.html = None
 		
 
@@ -136,7 +144,7 @@ class WebTransform(object):
 		if ret == -1:
 			print "HTML was malformed, but processed to XHTML anyway."
 
-		d = hParser.doc()
+		d = hParser.doc() # TODO: hParser is a memleak
 		if not d:
 			print "Libxml error: could not convert to XHTML."
 			return

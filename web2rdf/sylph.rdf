@@ -1,0 +1,116 @@
+TODO: Sylph Ontology
+
+===== MAJOR NOUNS =====
+
+* Person
+* Robot
+
+* User
+	Can be a person or a robot. Much more abstract concept.
+
+* Post
+	* Article
+		* NewsItem
+		* Story
+		* Editorial
+
+
+===== RDF TRANSFORMATION =====
+Describes how the RDF data was obtained.
+
+	originalUri:
+		Original URI of the (X)HTML document before it was transformed.
+		Note: Will I ever supply other types, such as PDF, ODT, or images?
+
+	transformationTime:
+		Date and time that the document was transformed into RDF.
+		Use a common, widely-accepted date format.
+
+	wasRdf (boolean):
+		If the content was already RDF.
+
+	usedXslt (boolean):
+		If the content was transformed into RDF using XSLT.
+
+	usedRdfa (boolean):
+		If the content was transformed into RDF using RDFa.
+
+	usedGrddl (boolean):
+		If the content was transformed into RDF using GRDDL.
+
+	usedHeuristic (boolean):
+		If the content was transformed into RDF using a heuristic, ie. there was
+		no other option to get RDF and no specific XSLT existed.
+		(I won't be doing this until later.)
+
+	xsltPackage:
+		Describes the "package" the XSLT was found in. 
+
+	xsltPackageVersion:
+		Describes the package's version. 
+
+	xsltPackageDate:
+		Describes the package's date.
+
+	xsltFile:
+		Describes the XSLT file that was used in the transformation. This can be
+		a file inside of a package, an XSLT document on the web, or an XSLT file
+		on the local filesystem being used to test the translator (not in a 
+		package). 
+
+===== CONTENT =====
+
+	isPartialContent (boolean):
+		The content is only presented partially.
+		See: [[fullContentUri]]
+
+	fullContentUri:
+		The location where the content is represented fully.
+		See: [[isPartialContent]]
+
+	articleUri:
+		The location where the article content can be retrieved.
+
+	commentsUri:
+		The location where any comments can be retrieved.
+
+
+===== RATINGS AND SCORE =====
+
+	score:
+		The score the post got. 
+		Can be calculated from scoreUp and scoreDown, although sometimes this is 
+		all we are provided.
+
+	scoreUp:
+		The number of upvotes a post got.
+
+	scoreDown:
+		The number of downvotes a post got.
+
+	ratedCategory:
+		The rated category the post got.
+		Eg. slashdot's insightful, interesting, funny...
+
+===== USER METADATA =====
+
+Note: I think it'll be difficult to relate these to foaf:Person. sioc:User might
+be a better target. Then we can supply [user, sylph:isPerson, foaf]
+
+	isAnonymousUser (boolean):
+		If the user is anonymous. 
+		Is this necessary? Without a foaf:Person or username, we can derive
+		this property fairly easily. 
+
+	websiteUsername
+		The username a foaf:Person or sioc:User has on a website.
+
+	websiteUserPage
+		The userpage a foaf:Person or sioc:User has on a website.
+
+	websiteUserId
+		The userid a foaf:Person or sioc:User has on a website.
+
+	homepage
+		A user's home page. Can have multiple. (May just want to use foaf/sioc)
+

@@ -8,7 +8,14 @@
 Very simple mechanism for getting the template we need from a URL.
 """
 
-from sites.domainMap import domainMap
+# Import path changes depending on where Web2Rdf is called/imported.
+importError = False
+try:
+	from sites.domainMap import domainMap
+except ImportError:
+	importError = True
+if importError:
+	from ..sites.domainMap import domainMap
 
 def getTemplate(uri):
 	"""Get the filename of the template from the URI."""
@@ -17,19 +24,28 @@ def getTemplate(uri):
 	if not module:
 		return False
 
+	# TODO: MESSY MESSY MESSY
+	impError = False
 	try:
 		# XXX TODO NOTE: Very, very insecure code! You lazy bastard.
 		imp = "from sites.%s.uriTemplateMap import uriTemplateMap" % module
 		exec imp
 	except ImportError:
-		print "Could not import module %s" % module
-		return False
+		impError = True
+	if impError:
+		try:
+			# XXX TODO NOTE: Very, very insecure code! You lazy bastard.
+			imp = "from ..sites.%s.uriTemplateMap import uriTemplateMap" % module
+			exec imp
+		except ImportError:
+			print "Could not import module %s" % module
+			return False
 
 	tpl = uriTemplateMap(uri)
 	if not tpl:
 		return False
 
-	tpl = './sites/' + module + '/' + tpl
+	tpl = 'sites/' + module + '/' + tpl
 	return tpl
 
 if __name__ == '__main__':
