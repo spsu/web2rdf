@@ -1,5 +1,9 @@
 #### Project Specific Ignore ####
 
+# SQLite databases
+*.sqlite
+*.sqlite-*
+
 # Files I often save to:
 temp.*
 cache.*
