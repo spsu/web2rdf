@@ -22,13 +22,21 @@ rstore = RdfStore(params)
 rstore.open()
 store = rstore.get()
 
-#print "===== Contexts ====="
-#for c in store.contexts():
-#	print "* " + str(c)
-#	ctx = c
-#print ""
+print "===== Contexts ====="
+ctx = None
+for c in store.contexts():
+	print type(c)
+	print c
+	print ""
+	#print "* " + str(c)
+	ctx = c
+print ""
 
-graph = Graph(store, identifier = URIRef("http://test"))
+#graph = Graph(store, identifier = URIRef("http://test"))
+graph = ctx
+
+print "===== Using graph ====="
+print graph
 
 def getUsers(graph):
 	query = """
@@ -66,7 +74,7 @@ def getStories(graph):
 				FILTER( !bound(?user) )
 			}
 			"""
-	query2 = """
+	query = """
 			PREFIX sioc: <http://rdfs.org/sioc/ns#>
 			PREFIX dcterms: <http://purl.org/dc/terms/>
 			PREFIX sylph: <http://possibilistic.org/onto/>
@@ -87,7 +95,7 @@ def getStories(graph):
 		print "* %s (%s)" % row
 	print "Total stories: %d" % i
 
-#getStories(graph)
+getStories(graph)
 getUsers(graph)
 
 
