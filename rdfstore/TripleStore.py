@@ -12,8 +12,9 @@ from rdflib.store import Store, NO_STORE, VALID_STORE
 from rdflib.store import SQLite
 from rdflib.store import MySQL
 
-class RdfStore(object):
-	"""A class for helping open/manage RDFLib stores."""
+class TripleStore(object):
+	"""A class for helping open/manage RDFLib stores.
+	Has additional methods to remove contexts, manage data, etc."""
 
 	def __init__(self, params = None, storeType = None):
 		"""Initializes the store interface"""
@@ -60,15 +61,15 @@ class RdfStore(object):
 			self.store = rdflib.store.MySQL.MySQL()
 
 	def get(self):
-		"""Return the store."""
+		"""Return the underlying RDFLib store."""
 		return self.store
 
 	def isOpen(self):
-		"""Determine if open."""
+		"""Determine if the store is open."""
 		return self.isOpen
 
 	def open(self):
-		"""Opens the database"""
+		"""Opens the store."""
 		if self.isOpen:
 			return True
 
@@ -101,4 +102,29 @@ class RdfStore(object):
 			return True
 
 		return False
+
+	# ============================= DATA MANAGEMENT ===========================#
+
+	def deleteGraph(self, context):
+		"""Removes the graph context from the triplestore."""
+		uriContext = context			
+		if type(context) == rdflib.Graph.Graph:
+			uriContext = context.identifier
+
+		if type(uriContext) != str:
+			raise Exception, "deleteGraph must be supplied a graph or URI."
+		self.store.remove((None, None, None), uriContext)
+		self.store.commit()
+
+	def getGraph(self, context):
+		"""Fetches the graph context requested from the triplestore."""
+		if type(context) == str:
+			context = URIRef(context)
+
+		if type(context) != URIRef:
+			raise Exception, "getGraph requires a string or URIRef."
+
+		graph = Graph(self.store, identifier=context)
+		return graph.default_context
+
 

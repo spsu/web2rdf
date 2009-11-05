@@ -14,26 +14,60 @@ from rdflib.store import Store, NO_STORE, VALID_STORE
 from rdflib.store import SQLite
 from rdflib.sparql.bison import Parse
 
-from rdfstore.RdfStore import RdfStore
+from rdfstore.TripleStore import TripleStore
 
 #params = "./testdb.sqlite"								# SQLITE
 params = ('localhost', 'tuser', 'tuser', 'rdf')			# MYSQL
-rstore = RdfStore(params)
-rstore.open()
-store = rstore.get()
+tstore = TripleStore(params)
+tstore.open()
+store = tstore.get()
 
 print "===== Contexts ====="
 ctx = None
-for c in store.contexts():
-	print type(c)
-	print c
-	print ""
+#for c in store.contexts():
+	#print type(c)
+	#print c
+	#print ""
 	#print "* " + str(c)
-	ctx = c
+	#ctx = c
 print ""
 
+#print ctx
+#print ctx.identifier # THIS IS THE CONTEXT !!!
+#context = ctx.identifier
+
+print "================================"
+
+context = 'http://linux.slashdot.org/story/09/11/03/2211231/Some-Early-Adopters-Stung-By-Ubuntus-Karmic-Koala#context'
+
+graph = tstore.getGraph(context)
+
+print graph
+print ""
+print graph.identifier
+
+
+
+#for t in graph.triples((None, None, None)):
+#	print t
+
+
+#graph = tstore.getContext()
+
+
+
+
+
+
+# XXX: THe following will remove a context from the triplestore:
+#store.remove((None, None, None), context)
+#store.commit()
+
+#import sys
+#sys.exit()
+
 #graph = Graph(store, identifier = URIRef("http://test"))
-graph = ctx
+#graph = ctx
 
 print "===== Using graph ====="
 print graph
