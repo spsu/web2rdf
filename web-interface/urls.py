@@ -7,7 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     # (r'^websylph/', include('websylph.foo.urls')),
-    (r'^/?$', 'websylph.news.views.index'),
+    (r'^/?$', 'news.views.index'),
     #(r'^polls/(?P<poll_id>\d+)/$', 'mysite.polls.views.detail'),
     #(r'^polls/(?P<poll_id>\d+)/results/$', 'mysite.polls.views.results'),
     #(r'^polls/(?P<poll_id>\d+)/vote/$', 'mysite.polls.views.vote'),
