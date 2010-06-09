@@ -1,6 +1,8 @@
 Project Description
 ===================
 
+***THIS CODE SUCKS. I'll work on it in the coming weeks.***
+
 Turn any generic web address into semantic RDF content if possible via the 
 use of:
 
