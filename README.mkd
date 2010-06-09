@@ -1,0 +1,39 @@
+Project Description
+===================
+
+Turn any generic web address into semantic RDF content if possible via the 
+use of:
+
+* site specific rules (if they exist)
+* software specific rules (if a particular software, eg. Wordpress, phpBB) is 
+  detected
+* rely on heuritics otherwise
+	* supply a basic learning algorithm to improve quality of heuristics
+	* These can be pretty advanced...
+
+Also report the following:
+
+* Type of website
+* Type of software (eg. Wordpress, phpBB, etc.)
+* If it appears the page is static rather than dynamic
+* License of content (copyright, CC, public domain, etc.)
+* If the website is friendly to this method
+	* Also, if the website makes an attempt to block this method via HTTP user
+	  agent headers, etc.
+* If the website uses ads or user tracking (and list them)
+* If the website supports direct semantic endpoints rather than scraping
+* An estimated approximation of how accurate the parsing was in [0.0, 1.0]
+* Basic sitemap
+	* Location of likely "feed" urls (that can be utilized like RSS/Atom)
+
+All ads will be filtered out of the returned RDF. 
+
+_This project is a work in progress_, and it is designed to support my 
+other distributed web project: [Sylph](http://possibilistic.org/docs/sylph/).
+
+License
+=======
+
+Project is AGPL3 licensed (may relicense if requested). Site-specific rules and
+templates are licensed under BSD/MIT and GFDL/CC-BY-SA.
+
